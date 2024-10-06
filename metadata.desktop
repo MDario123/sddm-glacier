@@ -1,0 +1,18 @@
+[SddmGreeterTheme]
+Name=Glacier
+Type=sddm-theme
+Version=1.0
+
+Description=Minimalistic with sharp and clean aesthetics!
+Website=https://github.com/MDario123/sddm-glacier
+Screenshot=Preview.png
+
+Author=Manuel Dario
+Email=manuel.dario.oliver@gmail.com
+Copyright=
+License=GPL-3.0-or-later
+
+ConfigFile=theme.conf
+MainScript=Main.qml
+Theme-Id=glacier
+Theme-API=2.11
