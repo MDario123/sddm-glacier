@@ -15,23 +15,111 @@ ComboBox {
     model: sessionModel
     currentIndex: model.lastIndex
     textRole: "name"
+    states: [
+        State {
+            name: "DOWN"
+            when: down
+        }
+    ]
+    transitions: [
+        Transition {
+            to: "DOWN"
+            animations: [
+                ColorAnimation {
+                    target: background
+                    properties: "color"
+                    to: root.accentColor
+                    duration: 300
+                },
+                ColorAnimation {
+                    target: displayedItem
+                    properties: "color"
+                    to: root.background1Color
+                    duration: 300
+                }
+            ]
+        },
+        Transition {
+            from: "DOWN"
+            animations: [
+                ColorAnimation {
+                    target: background
+                    properties: "color"
+                    to: root.background1Color
+                    duration: 300
+                },
+                ColorAnimation {
+                    target: displayedItem
+                    properties: "color"
+                    to: root.textColor
+                    duration: 300
+                }
+            ]
+        }
+    ]
 
     delegate: ItemDelegate {
         width: selectSession.width
         anchors.horizontalCenter: parent.horizontalCenter
         highlighted: selectSession.highlightedIndex === index
+        states: [
+            State {
+                name: "HIGHLIGHTED"
+                when: highlighted
+            }
+        ]
+        transitions: [
+            Transition {
+                to: "HIGHLIGHTED"
+                animations: [
+                    ColorAnimation {
+                        target: itemBackground
+                        properties: "color"
+                        to: root.accentColor
+                        duration: 300
+                    },
+                    ColorAnimation {
+                        target: content
+                        properties: "color"
+                        to: root.background1Color
+                        duration: 300
+                    }
+                ]
+            },
+            Transition {
+                from: "HIGHLIGHTED"
+                animations: [
+                    ColorAnimation {
+                        target: itemBackground
+                        properties: "color"
+                        to: root.background1Color
+                        duration: 300
+                    },
+                    ColorAnimation {
+                        target: content
+                        properties: "color"
+                        to: root.textColor
+                        duration: 300
+                    }
+                ]
+            }
+        ]
 
         contentItem: Text {
+            id: content
+
             height: 30
             width: parent.width
             text: name
-            color: parent.highlighted ? root.background1Color : root.textColor
+            color: root.textColor
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
 
         background: Rectangle {
-            color: highlighted ? root.accentColor : root.background1Color
+            id: itemBackground
+
+            color: root.background1Color
             border.color: root.accentColor
             border.width: config.BorderSize
             radius: 10000
@@ -43,13 +131,15 @@ ComboBox {
         id: displayedItem
 
         text: selectSession.currentText
-        color: parent.down ? root.background1Color : root.textColor
+        color: root.textColor
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }
 
     background: Rectangle {
-        color: down ? root.accentColor : root.background1Color
+        id: background
+
+        color: root.background1Color
         border.color: root.accentColor
         border.width: config.BorderSize
         radius: 10000
