@@ -6,7 +6,7 @@ TextField {
 
     height: root.font.pointSize * 2.5
     implicitWidth: Math.min(Math.max(150, contentWidth + 30), 600)
-    Keys.onReturnPressed: sddm.login(config.Username, password.text, sessionPicker.selectedSession)
+    Keys.onReturnPressed: sddm.login(userModel.lastUser, password.text, sessionPicker.selectedSession)
     focus: true
     echoMode: TextInput.Password
     passwordCharacter: "*"
