@@ -1,9 +1,7 @@
 import "Components"
-import QtGraphicalEffects 1.0
 import QtMultimedia 5.15
 import QtQuick 2.11
 import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.11
 import SddmComponents 2.0 as SDDM
 
 Pane {
