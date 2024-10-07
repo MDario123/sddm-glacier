@@ -17,7 +17,7 @@ TextField {
     color: root.textColor
 
     background: Rectangle {
-        color: root.background1Color
+        color: root.backgroundColor
         border.color: root.accentColor
         border.width: config.BorderSize
         radius: 10000

@@ -7,11 +7,10 @@ import SddmComponents 2.0 as SDDM
 Pane {
     id: root
 
-    property color textColor: config.TextColor || "#cdd6f4"
-    property color textPreviewColor: "#999999"
-    property color accentColor: config.AccentColor || "#c0a0f0"
-    property color background1Color: config.Background1Color || "#1e1e2e"
-    property color background2Color: "#000000"
+    property color textColor: config.TextColor
+    property color textPreviewColor: config.TextPreviewColor
+    property color accentColor: config.AccentColor
+    property color backgroundColor: config.BackgroundColor
 
     height: config.ScreenHeight
     width: config.ScreenWidth
@@ -24,66 +23,57 @@ Pane {
         id: textConstants
     }
 
-    Item {
-        id: sizeHelper
+    Image {
+        id: placeholder
 
         anchors.fill: parent
-        height: parent.height
-        width: parent.width
+        source: config.Background
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        cache: true
+        clip: true
+        mipmap: true
+        visible: !videoBackground.isPlaying
+    }
 
-        Image {
-            id: placeholder
+    LoginForm {
+        id: loginform
 
-            anchors.fill: parent
-            source: config.Background
-            fillMode: Image.PreserveAspectCrop
-            asynchronous: true
-            cache: true
-            clip: true
-            mipmap: true
-            visible: !videoBackground.isPlaying
-        }
+        height: parent.height / 10
+        width: parent.width / 3
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 30
+        anchors.leftMargin: 30
+        z: 1
+    }
 
-        LoginForm {
-            id: loginform
+    SessionPicker {
+        id: sessionPicker
 
-            height: parent.height / 10
-            width: parent.width / 3
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 30
-            anchors.leftMargin: 30
-            z: 1
-        }
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 30
+        anchors.leftMargin: 30
+        z: 1
+    }
 
-        SessionPicker {
-            id: sessionPicker
+    Video {
+        id: videoBackground
 
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 30
-            anchors.leftMargin: 30
-            z: 1
-        }
-
-        Video {
-            id: videoBackground
-
-            onPlaying: placeholder.visible = false
-            source: config.AnimatedBackground !== "" ? "gst-pipeline: filesrc location=" + config.AnimatedBackground + " ! qtdemux ! avdec_h264 ! videoconvert ! autovideosink" : null
-            autoPlay: true
-            loops: 1e+06
-            anchors.fill: parent
-            z: -1
-        }
-
+        onPlaying: placeholder.visible = false
+        source: config.AnimatedBackground !== "" ? "gst-pipeline: filesrc location=" + config.AnimatedBackground + " ! qtdemux ! avdec_h264 ! videoconvert ! autovideosink" : null
+        autoPlay: true
+        loops: 1e+06
+        anchors.fill: parent
+        z: -1
     }
 
     background: Rectangle {
         id: lowestLayerBackground
 
         anchors.fill: parent
-        color: root.background1Color
+        color: root.backgroundColor
     }
 
 }

@@ -34,7 +34,7 @@ ComboBox {
                 ColorAnimation {
                     target: displayedItem
                     properties: "color"
-                    to: root.background1Color
+                    to: root.backgroundColor
                     duration: 300
                 }
             ]
@@ -45,7 +45,7 @@ ComboBox {
                 ColorAnimation {
                     target: background
                     properties: "color"
-                    to: root.background1Color
+                    to: root.backgroundColor
                     duration: 300
                 },
                 ColorAnimation {
@@ -81,7 +81,7 @@ ComboBox {
                     ColorAnimation {
                         target: content
                         properties: "color"
-                        to: root.background1Color
+                        to: root.backgroundColor
                         duration: 300
                     }
                 ]
@@ -92,7 +92,7 @@ ComboBox {
                     ColorAnimation {
                         target: itemBackground
                         properties: "color"
-                        to: root.background1Color
+                        to: root.backgroundColor
                         duration: 300
                     },
                     ColorAnimation {
@@ -119,7 +119,7 @@ ComboBox {
         background: Rectangle {
             id: itemBackground
 
-            color: root.background1Color
+            color: root.backgroundColor
             border.color: root.accentColor
             border.width: config.BorderSize
             radius: 10000
@@ -139,7 +139,7 @@ ComboBox {
     background: Rectangle {
         id: background
 
-        color: root.background1Color
+        color: root.backgroundColor
         border.color: root.accentColor
         border.width: config.BorderSize
         radius: 10000
