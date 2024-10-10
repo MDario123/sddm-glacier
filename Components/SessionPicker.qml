@@ -1,3 +1,4 @@
+import QtGraphicalEffects 1.0
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
@@ -7,149 +8,195 @@ ComboBox {
     property var selectedSession: selectSession.currentIndex
 
     height: root.font.pointSize * 3
-    width: root.font.pointSize * 15
+    width: root.font.pointSize * 3
     anchors.left: parent.left
     anchors.bottom: parent.bottom
     hoverEnabled: true
     indicator.visible: false
     model: sessionModel
     currentIndex: model.lastIndex
-    textRole: "name"
-    states: [
-        State {
-            name: "DOWN"
-            when: down
+
+    ColorOverlay {
+        id: displayedItemColored
+
+        anchors.fill: displayedItem
+        source: displayedItem
+        color: down ? root.backgroundColor : root.accentColor
+        rotation: down ? 360 : 0
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 600
+                easing.type: Easing.OutQuad
+            }
+
         }
-    ]
-    transitions: [
-        Transition {
-            to: "DOWN"
-            animations: [
-                ColorAnimation {
-                    target: background
-                    properties: "color"
-                    to: root.accentColor
-                    duration: 300
-                },
-                ColorAnimation {
-                    target: displayedItem
-                    properties: "color"
-                    to: root.backgroundColor
-                    duration: 300
-                }
-            ]
-        },
-        Transition {
-            from: "DOWN"
-            animations: [
-                ColorAnimation {
-                    target: background
-                    properties: "color"
-                    to: root.backgroundColor
-                    duration: 300
-                },
-                ColorAnimation {
-                    target: displayedItem
-                    properties: "color"
-                    to: root.textColor
-                    duration: 300
-                }
-            ]
+
+        Behavior on rotation {
+            RotationAnimation {
+                duration: 1500
+                easing.type: Easing.OutQuad
+            }
+
         }
-    ]
+
+    }
 
     delegate: ItemDelegate {
-        width: selectSession.width
-        anchors.horizontalCenter: parent.horizontalCenter
+        id: session
+
         highlighted: selectSession.highlightedIndex === index
+        anchors.left: parent.left
+        width: 150
+        height: 30
+        opacity: 0
+        anchors.leftMargin: -150
+        scale: highlighted ? 1.05 : 1
         states: [
             State {
-                name: "HIGHLIGHTED"
-                when: highlighted
+                name: "VISIBLE"
+                when: popupHandler.visible
+            },
+            State {
+                name: "NOTVISIBLE"
+                when: !popupHandler.visible
+
+                PropertyChanges {
+                    target: session
+                    anchors.leftMargin: -width
+                    opacity: 0
+                }
+
             }
         ]
         transitions: [
             Transition {
-                to: "HIGHLIGHTED"
-                animations: [
-                    ColorAnimation {
-                        target: itemBackground
-                        properties: "color"
-                        to: root.accentColor
-                        duration: 300
-                    },
-                    ColorAnimation {
-                        target: content
-                        properties: "color"
-                        to: root.backgroundColor
-                        duration: 300
+                to: "VISIBLE"
+
+                SequentialAnimation {
+                    // This acts as a delay
+                    PropertyAnimation {
+                        properties: ""
+                        duration: 150 * (sessionModel.count - index - 1)
                     }
-                ]
+
+                    ParallelAnimation {
+                        NumberAnimation {
+                            target: session
+                            properties: "opacity"
+                            to: 1
+                            duration: 200
+                            easing.type: Easing.InQuad
+                        }
+
+                        NumberAnimation {
+                            target: session
+                            properties: "anchors.leftMargin"
+                            to: 0
+                            duration: 500
+                            easing.type: Easing.OutBack
+                        }
+
+                    }
+
+                }
+
             },
             Transition {
-                from: "HIGHLIGHTED"
-                animations: [
-                    ColorAnimation {
-                        target: itemBackground
-                        properties: "color"
-                        to: root.backgroundColor
-                        duration: 300
-                    },
-                    ColorAnimation {
-                        target: content
-                        properties: "color"
-                        to: root.textColor
-                        duration: 300
-                    }
-                ]
+                from: "VISIBLE"
             }
         ]
+
+        Behavior on scale {
+            NumberAnimation {
+                easing.type: Easing.OutQuad
+                duration: 300
+            }
+
+        }
 
         contentItem: Text {
             id: content
 
-            height: 30
+            height: parent.height
             width: parent.width
             text: name
-            color: root.textColor
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
+            color: highlighted ? root.backgroundColor : root.textColor
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                }
+
+            }
+
         }
 
         background: Rectangle {
             id: itemBackground
 
-            color: root.backgroundColor
             border.color: root.accentColor
             border.width: config.BorderSize
-            radius: 10000
+            radius: 6000
+            color: highlighted ? root.accentColor : root.backgroundColor
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 300
+                }
+
+            }
+
         }
 
     }
 
-    contentItem: Text {
+    contentItem: Image {
         id: displayedItem
 
-        text: selectSession.currentText
-        color: root.textColor
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
+        anchors.margins: 5
+        anchors.fill: parent
+        source: "../Assets/gear.svg"
+        asynchronous: true
+        sourceSize: Qt.size(width, height)
+        visible: false
     }
 
     background: Rectangle {
         id: background
 
-        color: root.backgroundColor
+        color: down ? root.accentColor : root.backgroundColor
         border.color: root.accentColor
         border.width: config.BorderSize
-        radius: 10000
+        radius: 6000
+        scale: parent.hovered && !parent.pressed ? 1.1 : 1
+
+        Behavior on scale {
+            PropertyAnimation {
+                duration: 300
+                easing.type: Easing.OutQuad
+            }
+
+        }
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 600
+                easing.type: Easing.OutQuad
+            }
+
+        }
+
     }
 
     popup: Popup {
         id: popupHandler
 
-        y: parent.height
-        width: parent.width
+        x: -10
+        y: selectSession.height
+        width: 150
         implicitHeight: contentItem.implicitHeight
         padding: 10
 
