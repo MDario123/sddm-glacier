@@ -19,6 +19,7 @@
           libsForQt5.qt5.qtmultimedia
           gst_all_1.gst-plugins-base
           gst_all_1.gst-plugins-good
+          gst_all_1.gst-libav
 
           # Necessary to run `sddm-greeter --test-mode --theme .` on wayland 
           libsForQt5.qt5.qtwayland

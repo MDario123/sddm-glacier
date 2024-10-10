@@ -62,7 +62,7 @@ Pane {
         id: videoBackground
 
         onPlaying: placeholder.visible = false
-        source: config.AnimatedBackground !== "" ? "gst-pipeline: filesrc location=" + config.AnimatedBackground + " ! qtdemux ! avdec_h264 ! videoconvert ! autovideosink" : null
+        source: config.AnimatedBackground
         autoPlay: true
         loops: 1e+06
         anchors.fill: parent
