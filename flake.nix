@@ -5,25 +5,15 @@
 
   outputs = { self, nixpkgs }@inputs:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      pkgsForSystem = system:
+        import nixpkgs {
+          inherit system;
+        };
     in
     {
-      devShells.${system}.default = pkgs.stdenv.mkDerivation {
-        name = "shell";
-        buildInputs = with pkgs; [
-          libsForQt5.qt5.qtgraphicaleffects
-          libsForQt5.qt5.qtquickcontrols2
-
-          # Necessary for playing video
-          libsForQt5.qt5.qtmultimedia
-          gst_all_1.gst-plugins-base
-          gst_all_1.gst-plugins-good
-          gst_all_1.gst-libav
-
-          # Necessary to run `sddm-greeter --test-mode --theme .` on wayland 
-          libsForQt5.qt5.qtwayland
-        ];
-      };
+      packages = forAllSystems (system: (pkgsForSystem system).callPackage ./default.nix { });
+      devShell = forAllSystems (system: (pkgsForSystem system).callPackage ./shell.nix { });
     };
 }

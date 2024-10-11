@@ -8,9 +8,17 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  buildInputs = with pkgs.libsForQt5.qt5; [
-    qtgraphicaleffects
-  ];
+  buildInputs =
+    with pkgs.libsForQt5.qt5; [
+      qtgraphicaleffects
+      qtmultimedia
+    ] ++
+    (with pkgs.gst_all_1;
+    [
+      gst-plugins-base
+      gst-plugins-good
+      gst-libav
+    ]);
 
   installPhase =
     let
