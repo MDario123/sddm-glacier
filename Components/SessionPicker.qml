@@ -26,7 +26,7 @@ ComboBox {
 
         Behavior on color {
             ColorAnimation {
-                duration: 600
+                duration: (600) / config.AnimationSpeedMultiplier
                 easing.type: Easing.OutQuad
             }
 
@@ -34,7 +34,7 @@ ComboBox {
 
         Behavior on rotation {
             RotationAnimation {
-                duration: 1500
+                duration: (1500) / config.AnimationSpeedMultiplier
                 easing.type: Easing.OutQuad
             }
 
@@ -77,7 +77,7 @@ ComboBox {
                     // This acts as a delay
                     PropertyAnimation {
                         properties: ""
-                        duration: 150 * (sessionModel.count - index - 1)
+                        duration: (150 * (sessionModel.count - index - 1)) / config.AnimationSpeedMultiplier
                     }
 
                     ParallelAnimation {
@@ -85,7 +85,7 @@ ComboBox {
                             target: session
                             properties: "opacity"
                             to: 1
-                            duration: 200
+                            duration: (200) / config.AnimationSpeedMultiplier
                             easing.type: Easing.InQuad
                         }
 
@@ -93,7 +93,7 @@ ComboBox {
                             target: session
                             properties: "anchors.leftMargin"
                             to: 0
-                            duration: 500
+                            duration: (500) / config.AnimationSpeedMultiplier
                             easing.type: Easing.OutBack
                         }
 
@@ -110,7 +110,7 @@ ComboBox {
         Behavior on scale {
             NumberAnimation {
                 easing.type: Easing.OutQuad
-                duration: 300
+                duration: (300) / config.AnimationSpeedMultiplier
             }
 
         }
@@ -127,7 +127,7 @@ ComboBox {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 300
+                    duration: (300) / config.AnimationSpeedMultiplier
                 }
 
             }
@@ -144,7 +144,7 @@ ComboBox {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 300
+                    duration: (300) / config.AnimationSpeedMultiplier
                 }
 
             }
@@ -175,7 +175,7 @@ ComboBox {
 
         Behavior on scale {
             PropertyAnimation {
-                duration: 300
+                duration: (300) / config.AnimationSpeedMultiplier
                 easing.type: Easing.OutQuad
             }
 
@@ -183,7 +183,7 @@ ComboBox {
 
         Behavior on color {
             ColorAnimation {
-                duration: 600
+                duration: (600) / config.AnimationSpeedMultiplier
                 easing.type: Easing.OutQuad
             }
 
